@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VSM Analyzer — Lean Manufacturing</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⟳</span>
+      <div>
+        <h1>VSM Analyzer</h1>
+        <p>Value Stream Mapping · Toyota Production System</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── SECTION 1: Configuration ── -->
+  <section class="card" id="config-section">
+    <h2>1. Production Configuration</h2>
+    <p class="section-desc">Set your shift parameters to calculate takt time — the customer demand rate that drives all VSM decisions.</p>
+    <div class="config-grid">
+      <div class="field">
+        <label for="daily-demand">Daily Customer Demand <span class="unit">(units/day)</span></label>
+        <input type="number" id="daily-demand" value="240" min="1" />
+      </div>
+      <div class="field">
+        <label for="available-time">Available Production Time <span class="unit">(seconds/shift)</span></label>
+        <input type="number" id="available-time" value="28800" min="1" />
+        <small>8h shift = 28800s · 7.5h = 27000s</small>
+      </div>
+      <div class="takt-display">
+        <span class="takt-label">Takt Time</span>
+        <span class="takt-value" id="takt-preview">120.0s</span>
+        <span class="takt-sub">= available time ÷ demand</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: Process Steps ── -->
+  <section class="card" id="processes-section">
+    <h2>2. Value Stream Process Steps</h2>
+    <p class="section-desc">Add each station in your production flow from raw material to finished goods. Include all steps — even non-value-added ones like inspection or transport.</p>
+
+    <div id="processes-list"></div>
+
+    <button class="btn-secondary" id="add-process-btn">+ Add Process Step</button>
+  </section>
+
+  <!-- ── SECTION 3: Analyze ── -->
+  <section class="card center-card">
+    <button class="btn-primary" id="analyze-btn">Analyze Value Stream</button>
+    <div id="loading" class="hidden">
+      <div class="spinner"></div>
+      <p>Running VSM analysis + generating AI recommendations...</p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: Results ── -->
+  <section class="card hidden" id="results-section">
+
+    <!-- Summary metrics -->
+    <h2>3. VSM Analysis Results</h2>
+    <div class="metrics-grid" id="metrics-grid"></div>
+
+    <!-- Takt line chart -->
+    <div class="chart-container">
+      <h3>Cycle Time vs. Takt Time</h3>
+      <p class="chart-desc">Bars above the takt line are bottlenecks that limit throughput. Target: all stations below the red line.</p>
+      <canvas id="ct-chart"></canvas>
+    </div>
+
+    <!-- Waste breakdown -->
+    <div class="chart-row">
+      <div class="chart-half">
+        <h3>Waste Breakdown</h3>
+        <canvas id="waste-chart"></canvas>
+      </div>
+      <div class="chart-half" id="kaizen-panel">
+        <h3>Kaizen Opportunities</h3>
+        <div id="kaizen-list"></div>
+      </div>
+    </div>
+
+    <!-- VSM Flow Diagram -->
+    <div class="vsm-flow-container">
+      <h3>Value Stream Flow</h3>
+      <p class="chart-desc">Visual flow from Supplier → Customer. Red = bottleneck, orange = overloaded, gray = non-value-added.</p>
+      <div id="vsm-flow"></div>
+    </div>
+
+    <!-- AI Recommendations -->
+    <div class="ai-panel">
+      <h3>AI Lean Improvement Recommendations</h3>
+      <p class="ai-powered">Powered by GPT-4o · Toyota Production System analysis</p>
+      <div id="ai-recommendations" class="ai-content"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>VSM Analyzer · Built with Flask + OpenAI API · Based on Toyota Production System principles</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
