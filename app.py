@@ -34,7 +34,7 @@ def analyze():
     analysis = analyze_value_stream(processes, takt_time, daily_demand)
 
     # Build AI prompt and call OpenAI
-    prompt = build_ai_prompt(analysis, processes)
+    prompt = build_ai_prompt(analysis)
     ai_recommendations = _get_ai_recommendations(prompt)
 
     return jsonify({

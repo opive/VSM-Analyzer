@@ -195,7 +195,7 @@ def _quantify_waste(analyzed: list, total_wait: float, total_lead_time: float) -
     }
 
 
-def build_ai_prompt(analysis: dict, processes: list[dict]) -> str:
+def build_ai_prompt(analysis: dict) -> str:
     """
     Constructs the prompt sent to OpenAI. Structured so the model has all
     quantitative context needed to give specific, actionable lean recommendations.
